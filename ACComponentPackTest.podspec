@@ -1,17 +1,17 @@
 Pod::Spec.new do |spec|
   spec.name             = 'ACComponentPackTest'
-  spec.version          = '1.0.0'
+  spec.version          = '1.0.1'
   spec.license          = { :type => 'MIT' }
   spec.homepage         = 'https://github.com/ColinAlanHB/podSwiftTest.git'
   spec.authors          = { 'xhuatang' => 'xhuatang@linewell.com' }
   spec.summary          = '城市通2.0 - 消息组件'
-  spec.source           = { :git => 'https://github.com/ColinAlanHB/podSwiftTest.git', :tag => '1.0.0' }
+  spec.source           = { :git => 'https://github.com/ColinAlanHB/podSwiftTest.git', :tag => '1.0.1' }
   spec.requires_arc = true
   spec.swift_version = '4.0'
   spec.ios.deployment_target = '9.0'
   spec.source_files          = 'ACComponentPackTest/**/*.{m,h,swift}'
   spec.subspec 'ACComponentPackTestVendor' do |sss|
-     sss.ios.vendored_frameworks = 'Libs/GTSDK.framework'
+    # sss.ios.vendored_frameworks = 'Libs/GTSDK.framework'
      sss.ios.libraries           = 'c++','z','sqlite3'
   end
   spec.prepare_command = <<-EOF
@@ -32,7 +32,6 @@ framework module GTSDK {
 
 EOF
   
-  spec.static_framework = false
   spec.dependency       'ACEngineLib'
   spec.dependency       'Alamofire'
   spec.dependency       'SDCycleScrollView'

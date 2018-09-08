@@ -8,7 +8,7 @@
 
 import Foundation
 import ACNativeMain
-import GTSDK
+// import GTSDK
 
 @objc public class ACComponentPackTest : ACComponentBase {
     override public init() {
@@ -21,8 +21,8 @@ import GTSDK
     }
     
     /// 接受数据
-    @objc public func onReceiveConfigData(_ param:NSDictionary){
+    // @objc public func onReceiveConfigData(_ param:NSDictionary){
         
-    }
+    // }
 }
 
