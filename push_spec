@@ -1,7 +1,0 @@
-#!/bin/bash
-CMD_PATH=`dirname $0`
-cd $CMD_PATH
-
-pod repo push 202-linewell-specs ACComponentItemMessage.podspec --sources='git@192.168.202.61:root/linewell-specs.git,https://github.com/CocoaPods/Specs' --allow-warnings --verbose
-
-exit 0
