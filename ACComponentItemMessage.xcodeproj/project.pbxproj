@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		04BE449521411564007FFB5D /* Libs in Resources */ = {isa = PBXBuildFile; fileRef = 04BE449421411564007FFB5D /* Libs */; };
-		80933EE81B0493AA61B399EE /* Pods_ACComponentItemMessage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA230528704BEDCC0BE77DC7 /* Pods_ACComponentItemMessage.framework */; };
 		8814E340212ADF070050C9A5 /* ACComponentItemMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 8814E33E212ADF070050C9A5 /* ACComponentItemMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8814E36E212AE1B40050C9A5 /* ACComponentItemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8814E36D212AE1B40050C9A5 /* ACComponentItemMessage.swift */; };
 /* End PBXBuildFile section */
@@ -19,9 +18,7 @@
 		8814E33E212ADF070050C9A5 /* ACComponentItemMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACComponentItemMessage.h; sourceTree = "<group>"; };
 		8814E33F212ADF070050C9A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8814E36D212AE1B40050C9A5 /* ACComponentItemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACComponentItemMessage.swift; sourceTree = "<group>"; };
-		8CC9CC07D2ED46D3AE58C1C8 /* Pods-ACComponentItemMessage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACComponentItemMessage.release.xcconfig"; path = "../BigApp/Pods/Target Support Files/Pods-ACComponentItemMessage/Pods-ACComponentItemMessage.release.xcconfig"; sourceTree = "<group>"; };
 		CA230528704BEDCC0BE77DC7 /* Pods_ACComponentItemMessage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ACComponentItemMessage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F6D9CC56B0A9AB4FE5FE39CC /* Pods-ACComponentItemMessage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACComponentItemMessage.debug.xcconfig"; path = "../BigApp/Pods/Target Support Files/Pods-ACComponentItemMessage/Pods-ACComponentItemMessage.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,7 +26,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80933EE81B0493AA61B399EE /* Pods_ACComponentItemMessage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +47,6 @@
 				8814E33D212ADF070050C9A5 /* ACComponentItemMessage */,
 				8814E33C212ADF070050C9A5 /* Products */,
 				057422F96191A6E90F22D25A /* Frameworks */,
-				A6E876066F577D1C7766B997 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,15 +68,6 @@
 			path = ACComponentItemMessage;
 			sourceTree = "<group>";
 		};
-		A6E876066F577D1C7766B997 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F6D9CC56B0A9AB4FE5FE39CC /* Pods-ACComponentItemMessage.debug.xcconfig */,
-				8CC9CC07D2ED46D3AE58C1C8 /* Pods-ACComponentItemMessage.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -100,7 +86,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8814E343212ADF070050C9A5 /* Build configuration list for PBXNativeTarget "ACComponentItemMessage" */;
 			buildPhases = (
-				DB4E79797AB9A4FB55EED807 /* [CP] Check Pods Manifest.lock */,
 				8814E336212ADF070050C9A5 /* Sources */,
 				8814E337212ADF070050C9A5 /* Frameworks */,
 				8814E338212ADF070050C9A5 /* Headers */,
@@ -157,27 +142,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		DB4E79797AB9A4FB55EED807 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ACComponentItemMessage-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8814E336212ADF070050C9A5 /* Sources */ = {
@@ -313,7 +277,6 @@
 		};
 		8814E344212ADF070050C9A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F6D9CC56B0A9AB4FE5FE39CC /* Pods-ACComponentItemMessage.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -324,10 +287,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ACComponentItemMessage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -347,7 +307,6 @@
 		};
 		8814E345212ADF070050C9A5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8CC9CC07D2ED46D3AE58C1C8 /* Pods-ACComponentItemMessage.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -358,10 +317,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ACComponentItemMessage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <GTSDK/GeTuiSdk.h>
 
 //! Project version number for ACComponentItemMessage.
 FOUNDATION_EXPORT double ACComponentItemMessageVersionNumber;

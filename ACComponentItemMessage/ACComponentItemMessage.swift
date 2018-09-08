@@ -7,21 +7,4 @@
 //
 
 import Foundation
-import ACRouterKit
 
-/// 轮播图
-public class ACComponentItemMessage : ACComponentBase {
-    
-    /// 组件字典
-    fileprivate var componentDic : [String:Any] = [:]
-    
-    fileprivate var configDic: [String: ComponentBaseModel] = [:]
-    
-    override public init!() {
-        super.init()
-    }
-    
-    override public init!(app: ACComponentBaseProtocol!) {
-        super.init(app: app)
-    }
-}
