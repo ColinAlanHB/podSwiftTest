@@ -1,0 +1,25 @@
+//
+//  MessageListDTO.swift
+//  citizencloud
+//
+//  Created by 沈移动 on 2018/4/11.
+//  Copyright © 2018年 linewell. All rights reserved.
+//
+
+import Foundation
+import ACComponentItemLib
+
+/// 消息列表
+class MessageListDTO : BaseModel {
+    
+    var thirdSystemId : String?      // 第三方系统标识
+    var thirdSystemName : String?  // 第三方系统名称
+    var thirdSystemIconUrl : String?  // 第三方系统图标url
+    var showTimeStr : String?  // 显示时间字符串
+    var unReadCount: Int = 0 // 消息未读数
+    var summary: String? // 消息摘要
+    
+    required init() {
+        
+    }
+}

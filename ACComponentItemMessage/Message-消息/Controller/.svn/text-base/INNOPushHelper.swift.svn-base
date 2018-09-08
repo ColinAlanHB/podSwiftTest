@@ -1,0 +1,332 @@
+//
+//  INNOPushHelper.swift
+//  ACComponentItemMessage
+//
+//  Created by 沈移动 on 2018/8/21.
+//  Copyright © 2018年 bigapp. All rights reserved.
+//
+
+import Foundation
+import SwiftyJSON
+import UserNotifications
+import ACComponentItemLib
+
+public struct INNOPushHelper {
+    
+    // 单实例对象
+    static var instance:INNOPushHelper = {
+        
+        let helper = INNOPushHelper()
+        return helper
+    }()
+    
+    // 消息列表
+    fileprivate var msgList: [MessageListDTO]
+    
+    /// 初始化
+    private init(){
+        msgList = []
+    }
+    
+}
+
+extension INNOPushHelper {
+    
+    /// 在线消息处理
+    ///
+    /// - Parameter payloadData: <#payloadData description#>
+    func receiveMessageHander(_ payloadData: Data) {
+        
+        do {
+            let json = try JSON(data: payloadData)
+            
+            let thirdSystemId = json["thirdSystemId"].string ?? "0"
+            
+            
+            //            let title = json["_title_"].string ?? ""
+            //            let content = json["_content_"].string ?? ""
+            
+            if let _sbt_ = json["_sbt_"].string {
+                switch _sbt_ {
+                case "2001": // 材料上传成功
+                    // 通知刷新页面
+                    noticeDefault.post(name: INNONotificationTypes.K_UPDATE_FILE_LIST_NOTIFICATION, object: nil)
+                    
+                default:
+                    self.addMsgCountNum(thirdSystemId, num: 1)
+                    LogPrint("------ \(_sbt_) ------")
+                    
+                }
+            } else {
+                LogPrint("------ 获取_sbt_出错 ------")
+            }
+        } catch {
+            LogPrint("\(#function) json解析出错")
+        }
+        
+        // 刷新消息
+        self.initMsgCount()
+        
+    }
+    
+    /// 离线静默消息处理
+    ///
+    /// - Parameter payloadData: <#payloadData description#>
+    func offLineMessageHander(_ payloadData: Data) {
+        
+        do {
+            let json = try JSON(data: payloadData)
+            
+            if let _sbt_ = json["_sbt_"].string {
+                switch _sbt_ {
+                case "2001": // 材料上传成功
+                    // 通知刷新页面
+                    noticeDefault.post(name: INNONotificationTypes.K_UPDATE_FILE_LIST_NOTIFICATION, object: nil)
+                default:
+                    LogPrint("------ \(_sbt_) ------")
+                    
+                }
+            } else {
+                LogPrint("------ 获取_sbt_出错 ------")
+            }
+        } catch {
+            LogPrint("\(#function) json解析出错")
+        }
+        
+        // 刷新消息
+        self.initMsgCount()
+        
+    }
+    
+    /// 点击事件处理
+    ///
+    /// - Parameter payloadData: <#payloadData description#>
+    func clickMessageHander(_ payloadData: Data) {
+        
+        do {
+            let json = try JSON(data: payloadData)
+            let thirdSystemId = json["thirdSystemId"].string ?? "0"
+            self.reduceMsgCount(thirdSystemId, count: 1)
+            
+            if let _sbt_ = json["_sbt_"].string {
+                switch _sbt_ {
+                case "5002": // 企业认证
+                    break
+                    
+                case "5003": // 第三方推送
+                    let openParams = json["openParams"].string ?? ""
+                    INNOPageRoutesManager.instance.openLinkUrl(openParams, shareinfo: nil)
+                    
+                default:
+                    LogPrint("------ \(_sbt_) ------")
+                    let openParams = json["openParams"].string ?? ""
+                    INNOPageRoutesManager.instance.openLinkUrl(openParams, shareinfo: nil)
+                }
+                
+            } else {
+                LogPrint("------ 获取_sbt_出错 ------")
+            }
+            
+        } catch {
+            LogPrint("\(#function) json解析出错")
+        }
+        
+        // 刷新消息
+        self.initMsgCount()
+        
+    }
+    
+    /// 获取远程消息未读数
+    func initMsgCount() {
+        
+        guard INNOSessionHelper.instance.isLogin() else {
+            return
+        }
+        
+        let completion = {(model: [MessageListDTO]?, result: ResultModel<[MessageListDTO]>?) -> () in
+            
+            if result == nil || result!.status == 0  || model == nil{
+                return
+            }
+            
+            INNOPushHelper.instance.msgList = model ?? []
+            
+            // 刷新角标
+            self.refreshBadgeNum()
+            
+        }
+        
+        let service = "/tongplatform/common/generalconfig/v1/messages/list-message"
+        INNONetworkTool.instance.getJson(service, param: nil, autoShowWait: false, autoCloseWait: false, completion: completion)
+    }
+    
+    /// 获取消息列表
+    func getMsgList() -> [MessageListDTO] {
+        return self.msgList
+    }
+    
+    /// 刷新角标数
+    ///
+    /// - Returns: <#return value description#>
+    func refreshBadgeNum() {
+        
+        let sum = self.getMsgCountSum()
+        
+        // 重新设置个推服务器角标
+//        GeTuiSdk.setBadge(UInt(sum))
+        UIApplication.shared.applicationIconBadgeNumber = sum
+        
+        // 通知
+        NotificationCenter.default.post(name: INNONotificationTypes.K_MSG_COUNT_REFRESH, object: nil)
+    }
+    
+    /// 获取消息总数量
+    ///
+    /// - Returns: <#return value description#>
+    func getMsgCountSum() -> Int {
+        
+        var sum = 0
+        for item in self.msgList {
+            sum += item.unReadCount
+        }
+        
+        return sum
+    }
+    
+    /// 增加消息数量，默认增加1
+    ///
+    /// - Parameters:
+    ///   - type: <#type description#>
+    ///   - num: <#num description#>
+    func addMsgCountNum(_ id: String?, num: Int?) {
+        
+        guard id != nil else {
+            return
+        }
+        
+        let number = num ?? 1
+        
+        for i in 0..<self.msgList.count {
+            guard self.msgList[i].thirdSystemId == id else {
+                continue
+            }
+            self.msgList[i].unReadCount += number
+        }
+        
+        // 刷新角标
+        self.refreshBadgeNum()
+        
+    }
+    
+    /// 减少消息数，count不设置，清空某个列表的消息数
+    func reduceMsgCount(_ id: String?, count: Int?) {
+        
+        if count == nil {
+            
+            for i in 0..<self.msgList.count {
+                guard self.msgList[i].thirdSystemId == id else {
+                    continue
+                }
+                self.msgList[i].unReadCount = 0
+            }
+            
+        } else {
+            
+            var num = 0
+            for i in 0..<self.msgList.count {
+                guard self.msgList[i].thirdSystemId == id else {
+                    continue
+                }
+                num = self.msgList[i].unReadCount - count!
+                self.msgList[i].unReadCount = num > 0 ? num : 0
+            }
+        }
+        
+        // 刷新角标
+        self.refreshBadgeNum()
+    }
+    
+    /// 清空所有的消息数
+    func clearAllMsgCount() {
+        
+        for i in 0..<self.msgList.count {
+            self.msgList[i].unReadCount = 0
+        }
+        
+        // 清空个推服务器角标
+//        GeTuiSdk.resetBadge()
+        
+        //根据iOS系统版本，分别处理
+        if #available(iOS 10, *) {
+            let center = UNUserNotificationCenter.current()
+            center.removeAllDeliveredNotifications() // To remove all delivered notifications
+            center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
+        } else {
+            UIApplication.shared.cancelAllLocalNotifications()
+        }
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        // 通知
+        NotificationCenter.default.post(name: INNONotificationTypes.K_MSG_COUNT_REFRESH, object: nil)
+    }
+    
+    /// 创建本地消息
+    ///
+    /// - Parameter userinfo: <#userinfo description#>
+    func createLocalNotification(_ userinfo: Data, message: String) {
+        
+        let payloadMsg = String(data: userinfo, encoding: String.Encoding.utf8)!
+        
+        if #available(iOS 10, *) {
+            
+            // 1. 创建通知内容
+            let content = UNMutableNotificationContent()
+            content.body = message
+            content.userInfo = ["payload": payloadMsg]
+            
+            // 2. 创建发送触发
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            
+            // 3. 发送请求标识符
+            let requestIdentifier = G_INFO_DIC["CFBundleIdentifier"] as! String
+            // 4. 创建一个发送请求
+            let request = UNNotificationRequest(identifier: requestIdentifier, content: content, trigger: trigger)
+            // 将请求添加到发送中心
+            UNUserNotificationCenter.current().add(request) { error in
+                if error == nil {
+                    LogPrint("Time Interval Notification scheduled: \\\\(requestIdentifier)")
+                }
+            }
+        } else {
+            let localNotification = UILocalNotification()
+            localNotification.alertBody = message
+            localNotification.userInfo = ["payload": payloadMsg]
+            localNotification.fireDate = NSDate(timeIntervalSinceNow: 1) as Date
+            UIApplication.shared.scheduleLocalNotification(localNotification)
+        }
+        
+    }
+    
+}
+
+// MARK:-  推送json
+class INNOPayloadJson : HandyJSON {
+    
+    var _sbt_ : String?         // 类型
+    
+    var sourceType : String?
+    
+    var _title_ : String?       // 标题
+    
+    var _content_ : String?     /// 内容
+    
+    var openType : String?
+    
+    var openParams : String?
+    
+    var thirdSystemId: String? // 第三方标识
+    
+    required init() {
+        
+    }
+}
